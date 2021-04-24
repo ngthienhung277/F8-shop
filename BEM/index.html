@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEM</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+</head>
+<body>
+
+    <div id="toast">
+        <!-- Success -->
+       
+    </div>
+     <div>
+        <div onclick="showSuccessToast();" class="btn btn--success">Show success toast</div>
+        <div onclick="showErrorToast();" class="btn btn--danger">Show danger toast</div>
+     </div>
+     <div class="toast toast--success">
+        <div class="toast___icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast___body">
+            <h3 class="toast___title">Success</h3>
+            <p class="toast___msg">Máy vi tính kết nối Internet (Windows, Ubuntu hoặc MacOS)</p>
+        </div>
+        <div class="toast___close">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+    <script>
+        // toast functiojn
+        function toast({
+            title = '',
+            message = '',
+            type ='info',
+            duration = 3000
+        }) {
+            const main = document.getElementById('toast');
+            if(main){
+                //Auto remove toast
+               const autoRemoveId = setTimeout(function(){
+                    main.removeChild(toast);
+                        },duration + 1000);
+                //Remove toast when clicked
+                const toast = document.createElement('div');
+
+                toast.onclick = function(e) {
+                    if(e.target.closest('.toast___close')){
+                        main.removeChild(toast);
+                        clearTimeout(autoRemoveId);
+                    }
+                }
+
+
+                const icons = {
+                    success:'fas fa-check-circle',
+                    info:'fas fa-info-circle',
+                    warning:'fas fa-exclamation-circle',
+                    error:'fas fa-exclamation-circle'
+
+                };
+                const delay = (duration /1000).toFixed(2);
+                const  icon = icons[type];
+                toast.classList.add(`toast`,`toast--${type}`);
+                toast.style.animation = `slideInLeft ease 1s, fadeOut linear 1s ${delay}s forwards`;
+                toast.innerHTML = `   
+                    <div class=" toast toast--${type}">
+                    <div class="toast___icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="toast___body">
+                        <h3 class="toast___title">${title}</h3>
+                        <p class="toast___msg">${message}</p>
+                    </div>
+                    <div class="toast___close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                `;
+                main.appendChild(toast);
+                
+             
+        }
+    }
+   //
+        function showSuccessToast() {
+            toast({
+                title:'Success.',
+                message :'Thanh cong roi ba!',
+                type: 'success',
+                duration: 1000
+        });
+    }
+
+        function showErrorToast() {
+            toast({
+                title:'Fail!',
+                message :'Sai roi ba!',
+                type: 'error',
+                duration: 1000
+        });
+    }
+
+    </script>
+</body>
+</html>
